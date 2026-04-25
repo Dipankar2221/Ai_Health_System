@@ -23,7 +23,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:5173"
+      "http://localhost:5173",
+      "https://ai-health-system-ten.vercel.app"
     ],
     credentials: true,
   })
