@@ -33,7 +33,11 @@ def load_model(model, scaler, cols):
         return None, None, None
 
 
-HEART_MODEL = joblib.load("heart_pipeline.pkl")
+try:
+    HEART_MODEL = joblib.load("heart_pipeline.pkl")
+except:
+    HEART_MODEL = None
+    print("❌ HEART MODEL FAILED")
 
 DIABETES_MODEL, DIABETES_SCALER, DIABETES_COLS = load_model(
     "diabetes_model.pkl", "diabetes_scaler.pkl", "diabetes_feature_columns.pkl"
@@ -181,5 +185,8 @@ def liver():
 # ----------------------------------------------------------
 # RUN SERVER
 # ----------------------------------------------------------
+import os
+
 if __name__ == "__main__":
-    app.run(port=5001, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
