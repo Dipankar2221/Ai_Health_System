@@ -23,7 +23,7 @@ const localPrediction = (data) => {
 const mlApiPrediction = async (endpoint, data) => {
   try {
     const response = await axios.post(
-      `http://127.0.0.1:5000/${endpoint}`,
+      `https://ai-health-system-go4f.onrender.com/${endpoint}`,
       data
     );
 

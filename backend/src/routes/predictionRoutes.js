@@ -7,7 +7,7 @@ import logger from "../utils/logger.js";
 const router = express.Router();
 
 // ---------------- ML SERVER ----------------
-const BASE_URL = process.env.ML_API_URL || "http://127.0.0.1:5001";
+const BASE_URL = process.env.ML_API_URL || "http://127.0.0.1:5000";
 
 // ---------------- ENDPOINT MAP ----------------
 const endpoints = {
