@@ -20,15 +20,19 @@ const app = express();
 // ===============================
 // ✅ CORS CONFIG
 // ===============================
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://ai-health-system-ten.vercel.app"
-    ],
-    credentials: true,
-  })
-);
+
+const corsOptions = {
+  origin: [
+    "http://localhost:5173",
+    "https://ai-health-system-ten.vercel.app",
+    "https://ai-health-system-bwyfm99ab-dip-ankars-projects.vercel.app"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 
 // ===============================
 // ✅ BODY PARSER
