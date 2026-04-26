@@ -3,36 +3,38 @@ import User from "../models/userModel.js";
 
 
 export const isAuthenticatedUser = async (req, res, next) => {
-  const { token } = req.cookies;
-
-  if (!token) {
-    return res.status(401).json({
-      success: false,
-      message: "Please login to access this resource",
-    });
-  }
-
   try {
-    const secret = process.env.JWT_SECRET || "yourSecretKey";
-    const decodedData = jwt.verify(token, secret);
-    req.user = await User.findById(decodedData.id);
+    const token =
+      req.cookies?.token ||
+      req.headers.authorization?.split(" ")[1];
 
-    if (!req.user) {
+    if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Invalid token: user does not exist",
+        message: "Login required",
       });
     }
 
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    req.user = user;
     next();
-  } catch (error) {
+  } catch (err) {
     return res.status(401).json({
       success: false,
-      message: "Invalid or expired token",
+      message: "Invalid token",
     });
   }
 };
-
 
 export const roleBasedAccess = (...roles) => {
   return (req, res, next) => {
