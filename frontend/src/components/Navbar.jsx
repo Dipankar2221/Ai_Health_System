@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
+  Close,
+  Menu,
   PersonAdd,
   Search,
   ShoppingBag,
@@ -16,6 +18,7 @@ const Navbar = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { cartItems = [] } = useSelector((state) => state.cart);
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPredictOpen, setIsPredictOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
@@ -23,7 +26,6 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const predictRef = useRef(null);
 
-  // ================= CLICK OUTSIDE =================
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -38,7 +40,6 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ================= SEARCH =================
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     navigate(
@@ -47,9 +48,9 @@ const Navbar = () => {
         : "/products"
     );
     setKeyword("");
+    setIsMenuOpen(false);
   };
 
-  // ================= LOGOUT =================
   const logoutUser = async () => {
     try {
       await dispatch(logout()).unwrap();
@@ -61,19 +62,17 @@ const Navbar = () => {
     }
   };
 
-  // ================= NAVIGATION =================
   const go = (path) => {
     navigate(path);
+    setIsMenuOpen(false);
     setIsDropdownOpen(false);
     setIsPredictOpen(false);
   };
 
-  // ================= DROPDOWN OPTIONS =================
   const options = [
-    ...(user?.role?.toLowerCase() === "admin"
-      ? [{ name: "Admin Dashboard", action: () => go("/admin/dashboard") }]
-      : []),
-
+    ...(user?.role === "admin"
+    ? [{ name: "Admin Dashboard", action: () => go("/admin/dashboard") }]
+    : []),
     { name: "Orders", action: () => go("/orders/user") },
     { name: "Account", action: () => go("/me") },
     { name: `Cart (${cartItems.length})`, action: () => go("/cart") },
@@ -90,16 +89,16 @@ const Navbar = () => {
           <span className="text-white">AI</span>
         </Link>
 
-        {/* DESKTOP NAV */}
-        <div className="flex items-center gap-6">
+        {/* DESKTOP */}
+        <div className="hidden md:flex items-center gap-6">
 
           <Link className="hover:text-blue-400 transition" to="/">Home</Link>
-          <Link className="hover:text-blue-400 transition" to="/products">Medicine</Link>
+          <Link className="hover:text-blue-400 transition" to="/products">Products</Link>
           <Link className="hover:text-blue-400 transition" to="/dash">Dashboard</Link>
           <Link className="hover:text-blue-400 transition" to="/reports">Reports</Link>
           <Link className="hover:text-blue-400 transition" to="/chatbot">Chatbot</Link>
 
-          {/* PREDICT DROPDOWN */}
+          {/* Predict Dropdown */}
           <div ref={predictRef} className="relative">
             <button
               onClick={() => setIsPredictOpen(!isPredictOpen)}
@@ -185,7 +184,46 @@ const Navbar = () => {
             </div>
           )}
         </div>
+
+        {/* MOBILE BUTTON */}
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="md:hidden"
+        >
+          {isMenuOpen ? <Close /> : <Menu />}
+        </button>
       </div>
+
+      {/* MOBILE MENU */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-gray-900 px-5 py-4 space-y-4 border-t border-gray-800">
+
+          <Link onClick={() => go("/")} className="block">Home</Link>
+          <Link onClick={() => go("/products")} className="block">Products</Link>
+          <Link onClick={() => go("/dash")} className="block">Dashboard</Link>
+          <Link onClick={() => go("/reports")} className="block">Reports</Link>
+          <Link onClick={() => go("/chatbot")} className="block">Chatbot</Link>
+
+          <div>
+            <p className="font-semibold mb-2">Predict</p>
+            {[
+              "/predict/heart",
+              "/predict/stroke",
+              "/predict/diabetes",
+              "/predict/kidney",
+              "/predict/liver",
+            ].map((path, i) => (
+              <button
+                key={i}
+                onClick={() => go(path)}
+                className="block text-left w-full py-1 capitalize"
+              >
+                {path.split("/")[2]}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
