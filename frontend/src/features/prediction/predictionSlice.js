@@ -1,6 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
+});
+
+
 // ===============================
 // 🔥 SINGLE DYNAMIC THUNK
 // ===============================
@@ -8,7 +15,7 @@ export const predictDisease = createAsyncThunk(
   "prediction/predictDisease",
   async ({ type, data }, { rejectWithValue }) => {
     try {
-      const res = await axios.post(
+      const res = await API.post(
         `/api/predict/${type}`,   // 🔥 dynamic endpoint
         data,
         { withCredentials: true }

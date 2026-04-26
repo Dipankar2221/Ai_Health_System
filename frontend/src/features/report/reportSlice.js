@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
+});
+
 // ===============================
 // 🔥 CREATE AI REPORT
 // ===============================
@@ -8,7 +14,7 @@ export const createAIReport = createAsyncThunk(
   "report/createAIReport",
   async ({ disease, prediction, formData }, { rejectWithValue }) => {
     try {
-      const res = await axios.post(
+      const res = await API.post(
         `/api/reports/ai-report/${disease}`, // ✅ dynamic disease param
         { prediction, formData },
         { withCredentials: true }
@@ -31,7 +37,7 @@ export const getReports = createAsyncThunk(
   "report/getReports",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("/api/reports", {
+      const res = await API.get("/api/reports", {
         withCredentials: true,
       });
 
@@ -50,7 +56,7 @@ export const getDashboard = createAsyncThunk(
   "report/getDashboard",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("/api/reports/reportDashboard", {
+      const res = await API.get("/api/reports/reportDashboard", {
         withCredentials: true,
       });
 
@@ -69,7 +75,7 @@ export const getRecommendation = createAsyncThunk(
   "report/getRecommendation",
   async ({ type, prediction, formData }, { rejectWithValue }) => {
     try {
-      const res = await axios.post(
+      const res = await API.post(
         "/api/reports/ai/recommendation",
         { type, prediction, formData },
         { withCredentials: true }
@@ -90,7 +96,7 @@ export const deleteReport = createAsyncThunk(
   "report/deleteReport",
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`/api/reports/${id}`, {
+      await API.delete(`/api/reports/${id}`, {
         withCredentials: true,
       });
 
