@@ -70,7 +70,9 @@ const Navbar = () => {
   };
 
   const options = [
-    { name: "Dashboard", action: () => go("/admin/dashboard") },
+    ...(user?.role === "admin"
+    ? [{ name: "Admin Dashboard", action: () => go("/admin/dashboard") }]
+    : []),
     { name: "Orders", action: () => go("/orders/user") },
     { name: "Account", action: () => go("/me") },
     { name: `Cart (${cartItems.length})`, action: () => go("/cart") },
