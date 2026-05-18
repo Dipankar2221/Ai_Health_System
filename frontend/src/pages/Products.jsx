@@ -31,18 +31,23 @@ const Products = () => {
   const keyword = searchParams.get("keyword") || "";
 
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 100000]);
 
-  const categories = [
+const categories = [
     "All",
-    "Mobile",
-    "Laptop",
-    "TV",
-    "Headphone",
-    "Men Shirt",
-    "Women Shirt",
-    "Smartwatch",
-    "Camera",
+    "Paracetamol",
+    "Crocin",
+    "Dolo 650",
+    "Azithromycin",
+    "Amoxicillin",
+    "Cetirizine",
+    "Omeprazole",
+    "Vitamin C",
+    "Insulin",
+    "Metformin",
+    "BP Medicine",
+    "Pain Killer",
+    "Cough Syrup",
+    "Antiseptic Cream",
   ];
 
   // fetch products
@@ -51,11 +56,10 @@ const Products = () => {
       getProduct({
         keyword,
         category: selectedCategory,
-        priceRange,
         page: currentPage,
       })
     );
-  }, [dispatch, keyword, selectedCategory, priceRange, currentPage]);
+  }, [dispatch, keyword, selectedCategory,currentPage]);
 
   // show toast for error
   useEffect(() => {
@@ -81,7 +85,6 @@ const Products = () => {
       getProduct({
         keyword,
         category: selectedCategory,
-        priceRange,
         page,
       })
     );
@@ -116,24 +119,6 @@ const Products = () => {
                 </li>
               ))}
             </ul>
-
-            {/* Price Filter */}
-            <div className="mt-6">
-              <h3 className="text-xl font-semibold mb-3 text-gray-800">
-                Filter by Price
-              </h3>
-              <input
-                type="range"
-                min="0"
-                max="100000"
-                value={priceRange[1]}
-                onChange={(e) => setPriceRange([0, Number(e.target.value)])}
-                className="w-full accent-green-600"
-              />
-              <p className="text-gray-600 mt-1">
-                ₹0 - ₹{priceRange[1].toLocaleString()}
-              </p>
-            </div>
           </aside>
 
           {/* Main Section */}

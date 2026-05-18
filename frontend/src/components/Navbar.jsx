@@ -93,7 +93,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-6">
 
           <Link className="hover:text-blue-400 transition" to="/">Home</Link>
-          <Link className="hover:text-blue-400 transition" to="/products">Products</Link>
+          <Link className="hover:text-blue-400 transition" to="/products">Medicine</Link>
           <Link className="hover:text-blue-400 transition" to="/dash">Dashboard</Link>
           <Link className="hover:text-blue-400 transition" to="/reports">Reports</Link>
           <Link className="hover:text-blue-400 transition" to="/chatbot">Chatbot</Link>
